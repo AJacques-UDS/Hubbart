@@ -1,3 +1,11 @@
+'''
+This is based on the code found at:
+
+https://www.geeksforgeeks.org/program-to-find-the-roots-of-quadratic-equation/
+
+on January 13th, 2022.
+'''
+
 from math import sqrt
 from typing import Tuple
 
