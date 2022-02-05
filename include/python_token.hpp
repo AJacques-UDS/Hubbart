@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "PythonTokenType.hpp"
+#include "python_token_type.hpp"
 
 class PythonToken {
 private:
@@ -12,7 +12,7 @@ private:
 public:
     PythonToken(const PythonTokenType &, const std::string &);
 
-    std::string toString(void);
+    PythonTokenType getType(void);
 };
 
 #endif

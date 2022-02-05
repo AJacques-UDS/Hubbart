@@ -1,9 +1,9 @@
-CC = clang++
-CFLAGS = -Iinclude/ -Isrc -std=c++11 -o build/pyllvmfe.exe
-CPPFILES = pyllvmfe.cpp PythonToken.cpp
+CC = clang++-12
+CFLAGS = -Iinclude/ -std=c++14 -o build/pyllvmfe
+CPPFILES = src/pyllvmfe.cpp src/python_token.cpp
 
 pyllvmfe:
 	$(CC) $(CPPFILES) $(CFLAGS)
 
-clean
+clean:
 	rm -f build/*
