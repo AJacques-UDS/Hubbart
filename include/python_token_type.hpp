@@ -1,8 +1,23 @@
+//===-- python_token_type.hpp - Instruction class definition ----*- C++ -*-===//
+//
+// Part of the Hubbart Project, under the MIT License.
+// See https://mit-license.org/ for license information.
+// SPDX-License-Identifier: MIT License
+//
+//===----------------------------------------------------------------------===//
+///
+/// \file
+/// Enumerates all class handles by Hubbart Lexer
+///
+//===----------------------------------------------------------------------===//
+
 #ifndef __HUBBART_PYTHON_TOKEN_TYPE_HPP
 #define __HUBBART_PYTHON_TOKEN_TYPE_HPP
 
-#include <string>
-
+/**
+ * @brief All Hubbart Token Classes
+ * 
+ */
 enum PythonTokenType {
     // Keywords
 
@@ -98,6 +113,7 @@ enum PythonTokenType {
     NUMBER_TOKEN,                         // (\-|\+)?\d(\.?\d?)(e?(\-|\+)?\d)?, 0b[0-1]+ (binary), 0x[0-9a-fA-F]+ (hexadecimal)
     NEWLINE_TOKEN,                        // \n and \r\n
     INDENTATION_TOKEN,                    // only support for 4 spaces for now
+    SPACE_TOKEN,
     EOF_TOKEN,
     COMMENT_TOKEN,
 };
