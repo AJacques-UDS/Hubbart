@@ -3,7 +3,7 @@
 #include <list>
 #include <string>
 
-#include "catch.hpp"
+#include "catch/catch.hpp"
 #include "lexer_exception.hpp"
 #include "python_token.hpp"
 #include "python_lexer.hpp"

@@ -96,7 +96,6 @@ bool PythonLexer::lex(void) {
             } else {
                 throw LexerException("Couldn't frame the next alphanumerical.");
             }
-            this->startOfLine = false;
         } else if (chr == ' ' || chr == '\t' || chr == '\n' || chr == '\r') {
             if (this->nextInvisible(&cursor, &frame)) {
                 std::string lex = this->extract(&cursor, &frame);

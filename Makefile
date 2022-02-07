@@ -1,5 +1,5 @@
 CC = clang++
-CFLAGS = -Iinclude/ -I/home/drewk/Documents/spdlog/include/ -std=c++11
+CFLAGS = -Iinclude/ -Ilibs/ -std=c++11
 CPPFILES = main.cpp src/python_token.cpp src/python_lexer.cpp src/lexer_exception.cpp
 TESTFILES = test/test_python_lexer.cpp src/python_token.cpp src/python_lexer.cpp src/lexer_exception.cpp
 
