@@ -40,6 +40,7 @@ static std::map<std::string, PythonTokenType> operators = {
 };
 
 static std::map<std::string, PythonTokenType> reserved = {
+    {"__init__", INIT_TOKEN},
     {"and", AND_TOKEN},
     {"bool", BOOL_TOKEN},
     {"break", BREAK_TOKEN},
@@ -72,7 +73,8 @@ static bool iswrapper(const char &chr) {
     return wrappers.find(chr) != wrappers.end();
 }
 
-static bool isoperator(const std::string &str) {
+static bool isoperator(const char &chr) {
+    std::string str(1, chr);
     return operators.find(str) != operators.end();
 }
 
@@ -89,7 +91,7 @@ bool PythonLexer::lex(void) {
         char chr = this->source[cursor];
         std::string str(2, chr);
 
-        if (isalpha(chr)) {
+        if (isalpha(chr) || chr == '_') {
             if (this->nextAlpha(&cursor, &frame)) {
                 std::string lex = this->extract(&cursor, &frame);
                 if (!this->addAlpha(lex)) throw LexerException("Can't add alphanumerical into tokens' list.");
@@ -105,6 +107,29 @@ bool PythonLexer::lex(void) {
             }
         } else if (chr == '\0') {
             end = true;
+        } else if (isoperator(chr)) {
+            if (this->nextOperator(&cursor, &frame)) {
+                std::string lex = this->extract(&cursor, &frame);
+                if (!this->addOperator(lex)) throw LexerException("Can't add operator into tokens' list.");
+            } else {
+                throw LexerException("Couldn't frame the next operator.");
+            }
+        } else if (iswrapper(chr)) {
+            if (this->nextWrapper(&cursor, &frame)) {
+                std::string lex = this->extract(&cursor, &frame);
+                if (!this->addWrapper(lex)) throw LexerException("Can't add wrapper into tokens' list.");
+            } else {
+                throw LexerException("Couldn't frame the next operator.");
+            }
+        } else if (isdigit(chr)) {
+            if (this->nextDigit(&cursor, &frame)) {
+                std::string lex = this->extract(&cursor, &frame);
+                if (!this->addDigit(lex)) throw LexerException("Can't add digit into tokens' list.");
+            } else {
+                throw LexerException("Couldn't frame the next digit.");
+            }
+        } else {
+            spdlog::info("Shouldn't be here. (character {})", chr);            
         }
     }
 
@@ -115,7 +140,7 @@ bool PythonLexer::nextAlpha(size_t* cursor, size_t* frame) {
     if (*cursor != *frame) return false;
 
     char current = this->source[*frame];
-    if (isalpha(current)) {
+    if (isalpha(current) || current == '_') {
         *frame = *frame + 1;
         current = this->source[*frame];
         while (isalnum(current) || current == '_') {
@@ -132,9 +157,60 @@ bool PythonLexer::nextInvisible(size_t* cursor, size_t* frame) {
     if (*cursor != *frame) return false;
 
     char chr = this->source[*frame];
-    while (chr == ' ') {
+    char tst = chr;
+
+    while (chr == tst) {
+        // Handling indentation one at a time
+        if (this->startOfLine) {
+            if (this->tabLength > 0) {
+                if ((*frame - *cursor) == this->tabLength) break;
+            }
+        }
+
         *frame = *frame + 1;
         chr = this->source[*frame];
+    }
+
+    return true;
+}
+
+bool PythonLexer::nextOperator(size_t* cursor, size_t* frame) {
+    if (*cursor != *frame) return false;
+
+    char chr = this->source[*frame];
+    char tst = this->source[*frame + 1];
+    std::string str(1, chr);
+    str += tst;
+
+    *frame = *frame + 1;
+    if (operators.find(str) != operators.end()) {
+        *frame = *frame + 1;
+    }
+
+    return true;
+}
+
+bool PythonLexer::nextWrapper(size_t* cursor, size_t* frame) {
+    if (*cursor != *frame) return false;
+    *frame = *frame + 1;
+    return true;
+}
+
+bool PythonLexer::nextDigit(size_t* cursor, size_t* frame) {
+    if (*cursor != *frame) return false;
+    char chr = this->source[*frame];
+
+    if (isdigit(chr)) {
+        *frame = *frame + 1;
+        chr = this->source[*frame];
+        int points = 0;
+        while (isdigit(chr) || chr == '.') {
+            if (chr == '.' && points > 0) throw LexerException("Too many decimal points");
+            else points++;
+
+            *frame = *frame + 1;
+            chr = this->source[*frame];
+        }
     }
 
     return true;
@@ -160,6 +236,8 @@ bool PythonLexer::addAlpha(const std::string &lex) {
         t = IDENTIFIER_TOKEN;
     }
 
+    this->startOfLine = false;
+
     PythonToken tok(t, lex);
     size_t size = this->tokens.size();
     this->tokens.push_back(tok);
@@ -167,12 +245,80 @@ bool PythonLexer::addAlpha(const std::string &lex) {
 }
 
 bool PythonLexer::addInvisible(const std::string &lex) {
-    PythonToken tok(SPACE_TOKEN, lex);
+    char chr = lex[0];
+    PythonTokenType t;
+
+    switch (chr) {
+        case ' ':
+            if (this->startOfLine == true) {
+                t = PythonTokenType::INDENTATION_TOKEN;
+                if (this->tabLength == 0) this->tabLength = lex.length();
+            } else {
+                t = PythonTokenType::SPACE_TOKEN;
+                this->startOfLine = false;
+            }
+            break;
+        case '\n':
+            t = PythonTokenType::NEWLINE_TOKEN;
+            this->startOfLine = true;
+            break;
+    }
+
+    PythonToken tok(t, lex);
     size_t size = this->tokens.size();
     this->tokens.push_back(tok);
     return (size + 1) == this->tokens.size();
 }
 
+bool PythonLexer::addOperator(const std::string &lex) {
+    PythonTokenType t = operators[lex];
+    this->startOfLine = false;
+    PythonToken tok(t, lex);
+    size_t size = this->tokens.size();
+    this->tokens.push_back(tok);
+    return (size + 1) == this->tokens.size();
+}
+
+bool PythonLexer::addWrapper(const std::string &lex) {
+    PythonTokenType t = wrappers[lex[0]];
+    switch (lex[0]) {
+    case '(':
+        this->paren++;
+        break;
+    case '[':
+        this->sbrack++;
+        break;
+    case '{':
+        this->cbrack++;
+        break;
+    case ')':
+        if (this->paren == 0) throw LexerException("Too many closing parenthesis.");
+        this->paren--;
+        break;
+    case ']':
+        if (this->sbrack == 0) throw LexerException("Too many closing square brackets.");
+        this->paren--;
+        break;
+    case '}':
+        if (this->cbrack == 0) throw LexerException("Too many closing curly brackets.");
+        this->paren--;
+        break;
+    default:
+        throw LexerException("Not a valid wrapper.");
+    }
+
+    PythonToken tok(t, lex);
+    size_t size = this->tokens.size();
+    this->tokens.push_back(tok);
+    return (size + 1) == this->tokens.size();
+}
+
+bool PythonLexer::addDigit(const std::string &lex) {
+    PythonToken tok(PythonTokenType::NUMBER_TOKEN, lex);
+    size_t size = this->tokens.size();
+    this->tokens.push_back(tok);
+    return (size + 1) == this->tokens.size();
+}
 
 std::list<PythonToken> PythonLexer::getTokens(void) {
     return this->tokens;

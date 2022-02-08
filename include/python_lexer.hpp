@@ -30,6 +30,13 @@ class PythonLexer {
 private:
     std::string source;
     std::list<PythonToken> tokens;
+
+    bool startOfLine = true;
+    size_t tabLength = 0;
+
+    int paren = 0;
+    int sbrack = 0;
+    int cbrack = 0;
 public:
     /**
      * @brief Construct a new Python Lexer object
@@ -65,6 +72,34 @@ public:
     bool nextInvisible(size_t*, size_t*);
 
     /**
+     * @brief Frame the next operator lexemes.
+     * 
+     * @return true when no errors
+     * @return false otherwise
+     * @todo This MUST BE moved to private
+     */
+    bool nextOperator(size_t*, size_t*);
+
+    /**
+     * @brief Frame the next wrapper lexemes
+     * 
+     * @return true when no errors
+     * @return false otherwise
+     * @todo This MUST BE moved to private
+     */
+    bool nextWrapper(size_t*, size_t*);
+
+    /**
+     * @brief Frame the next digit lexemes
+     * 
+     * @return true when no errors
+     * @return false otherwise
+     * @todo This MUST BE moved to private
+     */
+    bool nextDigit(size_t*, size_t*);
+
+
+    /**
      * @brief Extracts the framed lexemes
      * 
      * @return std::string 
@@ -91,6 +126,33 @@ public:
      */
     bool addInvisible(const std::string &);
 
+    /**
+     * @brief Add the operator lexem with its proper token type into the 
+     * tokens' list
+     * 
+     * @return true 
+     * @return false 
+     */
+    bool addOperator(const std::string &);
+
+    /**
+     * @brief Add the wrapper lexeme with its proper token type into the
+     * tokens' list
+     * 
+     * @return true 
+     * @return false 
+     */
+    bool addWrapper(const std::string &);
+
+    /**
+     * @brief Add the digit lexeme with its proper token type into the tokens'
+     * list
+     * 
+     * @return true 
+     * @return false 
+     */
+    bool addDigit(const std::string &);
+    
     /**
      * @brief Get the Tokens' list
      * 

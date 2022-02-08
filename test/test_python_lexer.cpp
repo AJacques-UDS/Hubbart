@@ -66,9 +66,6 @@ TEST_CASE("Adding new alphanumerical into the token's list.", "[addAlpha]") {
     std::string code = "from Hubbart import sqr2t";
     PythonLexer lexer(code);
 
-    size_t cursor = 0;
-    size_t frame = 4;
-
     REQUIRE(lexer.addAlpha("from") == true);
 }
 
@@ -109,4 +106,49 @@ TEST_CASE("Testing the lexer for the simple import line.", "[lex]") {
         REQUIRE(it->getLexeme() == lexemes[counter]);
         counter++;
     }
+}
+
+TEST_CASE("Testing newlines", "[lex]") {
+    std::string code = "from Hubbart import sqr2t\nclass Point2d\n";
+    PythonLexer lexer(code);
+    REQUIRE_NOTHROW(lexer.lex() == true);
+
+    std::list<PythonToken> tokens = lexer.getTokens();
+    REQUIRE(tokens.size() == 12);
+}
+
+TEST_CASE("Testing newlines and indentations", "[lex]") {
+    std::string code = "from Hubbart import sqr2t\nclass Point2d\n    def init\n        self y\n";
+    PythonLexer lexer(code);
+    REQUIRE_NOTHROW(lexer.lex() == true);
+
+    std::list<PythonToken> tokens = lexer.getTokens();
+    REQUIRE(tokens.size() == 23);
+}
+
+TEST_CASE("Testing operators", "[lex]") {
+    std::string code = "from Hubbart import sqr2t\nclass Point2d\n    def init\n        self = y\n";
+    PythonLexer lexer(code);
+    REQUIRE_NOTHROW(lexer.lex() == true);
+
+    std::list<PythonToken> tokens = lexer.getTokens();
+    REQUIRE(tokens.size() == 25);
+}
+
+TEST_CASE("Testing with wrappers", "[lex]") {
+    std::string code = "from Hubbart import sqr2t\nclass Point2d:\n    def init(self, x, y):\n        self = y\n";
+    PythonLexer lexer(code);
+    REQUIRE_NOTHROW(lexer.lex() == true);
+
+    std::list<PythonToken> tokens = lexer.getTokens();
+    REQUIRE(tokens.size() == 36);
+}
+
+TEST_CASE("Testing with numbers", "[lex]") {
+    std::string code = "from Hubbart import sqr2t\nglobal value = 3\nglobal key = 7.19\nclass Point2d:\n    def __init__(self, x: float, y: float) -> float:\n        self.x = x\n        self.y = y\n";
+    PythonLexer lexer(code);
+    REQUIRE_NOTHROW(lexer.lex() == true);
+
+    std::list<PythonToken> tokens = lexer.getTokens();
+    REQUIRE(tokens.size() == 74);
 }

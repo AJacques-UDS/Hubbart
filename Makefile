@@ -1,11 +1,11 @@
 CC = clang++
-CFLAGS = -Iinclude/ -Ilibs/ -std=c++11
+CFLAGS = -Wall -Iinclude/ -Ilibs/ -std=c++11 -O0
 CPPFILES = main.cpp src/python_token.cpp src/python_lexer.cpp src/lexer_exception.cpp
-TESTFILES = test/test_python_lexer.cpp src/python_token.cpp src/python_lexer.cpp src/lexer_exception.cpp
+TESTFILES = test/test_python_lexer.cpp test/test_python_lexeme.cpp src/python_token.cpp src/python_lexer.cpp src/lexer_exception.cpp
 
 pyllvm:
 	mkdir -p ./build/
-	$(CC) $(CPPFILES) $(CFLAGS) -o ./build/lexertot
+	$(CC) $(CPPFILES) $(CFLAGS) -o ./build/lexer
 
 .PHONY: test
 test:
