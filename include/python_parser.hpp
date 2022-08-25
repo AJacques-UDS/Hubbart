@@ -12,20 +12,18 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef __HUBBART_LEXER_EXCEPTION_HPP
-#define __HUBBART_LEXER_EXCEPTION_HPP
+#ifndef __HUBBART_PYTHON_PARSER_HPP
+#define __HUBBART_PYTHON_PARSER_HPP
 
+#include <list>
 #include <string>
 
-#include "hubbart_exception.hpp"
+class PythonParser {
+private:
+    std::list<PythonToken> tokens;
 
-/**
- * @brief The default Hubbart Lexer exception
- * 
- */
-class LexerException: HubbartException { 
 public:
-    LexerException(const std::string &);
-};
+    PythonParser(const std:list<PythonToken>&)
+}
 
 #endif
