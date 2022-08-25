@@ -1,9 +1,10 @@
 %{
-    #pragma GCC diagnostic ignored "-Wimplicit-function-declaration"
+    // #pragma GCC diagnostic ignored "-Wimplicit-function-declaration"
     #include <stdio.h>
     #include <stdlib.h>
 
     int yylex();
+    void yyerror(const char* msg);
 %}
 
 %define parse.error verbose
@@ -12,7 +13,8 @@
 %start input
 
 %%
-input: import_def
+input: TOKEN_WHITE input
+     | import_def
      | from_def TOKEN_WHITE import_def
 ;
 
@@ -44,12 +46,6 @@ int main (int argc, char **argv) {
     yyparse();
 }
 
-int yywrap(void)
-{
-   return 1;
-}
-
-int yyerror(char *s) {
-    fprintf(stderr, "error: %s\n", s);
-    exit(1);
+void yyerror(const char *msg) {
+    fprintf(stderr, "error: %s\n", msg);
 }
