@@ -9,18 +9,21 @@
 
 %define parse.error verbose
 
-%token TOKEN_KEYWORD_IMPORT TOKEN_KEYWORD_FROM TOKEN_IDENTIFIER TOKEN_WHITE
+%token TOKEN_KEYWORD_IMPORT TOKEN_KEYWORD_FROM TOKEN_IDENTIFIER
+%token TOKEN_EOL
 %start input
 
 %%
-input: TOKEN_WHITE input
-     | import_def
-     | from_def TOKEN_WHITE import_def
+input: /* empty */
+     | input importation TOKEN_EOL
+
+importation: import_def
+     | from_def import_def
 ;
 
-import_def: import TOKEN_WHITE identifier;
+import_def: import identifier;
 
-from_def: from TOKEN_WHITE identifier;
+from_def: from identifier;
 
 import: TOKEN_KEYWORD_IMPORT {
     printf("found import\n");

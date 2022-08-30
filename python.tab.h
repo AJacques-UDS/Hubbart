@@ -52,7 +52,7 @@ extern int yydebug;
     TOKEN_KEYWORD_IMPORT = 258,
     TOKEN_KEYWORD_FROM = 259,
     TOKEN_IDENTIFIER = 260,
-    TOKEN_WHITE = 261
+    TOKEN_EOL = 261
   };
 #endif
 
