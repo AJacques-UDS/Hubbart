@@ -1,12 +1,14 @@
 %option noyywrap
 %{
 #include <stdio.h>
+#include <string.h>
 
 #include "python.tab.h"
 
 void yyerror(const char *);
 int yyival;
 double yyfval;
+char yysval[64];
 %}
 
 %option noyywrap noinput nounput
@@ -14,7 +16,7 @@ double yyfval;
 integers        (-?0|[1-9][0-]*)
 floats          ((0|[1-9][0-9]*)(\.[0-9]+))
 identifiers     ([a-zA-Z\_][0-9a-zA-Z\_]*)
-identation      (^\t+)
+indentation     (^\t+)
 whites          (\ |\t)+
 eol             (\r|\n)
 
@@ -34,8 +36,9 @@ eol             (\r|\n)
 
 {integers}      { yyival = atoi(yytext); return TOKEN_INTEGER; }
 {floats}        { yyfval = atof(yytext); return TOKEN_FLOAT; }
-{identifiers}   { return TOKEN_IDENTIFIER; }
+{identifiers}   { strcpy(yytext, yysval); return TOKEN_IDENTIFIER; }
 {eol}           { return TOKEN_EOL; }
+{indentation}   { return TOKEN_INDENT }
 {whites}        { }
 
 .               { yyerror("Unknown token!!!"); }
@@ -51,9 +54,6 @@ int main (int argc, char **argv) {
 
 #ifdef YYDEBUG
     yydebug = 1;
-#endif
-#ifdef DEBUG
-    printf("Starting\r\n");
 #endif
     yyparse();
 }

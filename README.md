@@ -16,3 +16,49 @@ This will help areas using heterogeneous systems such as robotics or HPCs (*High
 ## Use cases
 
 The folder `usecases` will display script examples that we want to target for this framework.
+
+## Parser implementation
+
+* Importation statements
+```Python
+import math
+from math import sqrt
+```
+
+* Instantiation statements
+```Python
+myVar : int = 2
+myVar : float = 0.0
+myVar : List[int] = [1, 5, 8]
+myVar : MyObject = MyObject()
+```
+
+* Function Definition
+```Python
+def myFunction() -> int :
+<indent><statements>
+
+def myFunction(myParam: int) -> int :
+<indent><statements>
+```
+
+* Class Definition
+```Python
+def MyClass:
+<indent><__init__>
+<indent><function_statements>
+```
+
+* Arithmetic equations expression
+```Python
+myVar = 5 + 3
+myVar = myVar + 3
+myVar = myVar - 3
+```
+
+* Boolean expression
+```Python
+True
+myVar > 0
+myVar < 4 and myVar >= 8
+```

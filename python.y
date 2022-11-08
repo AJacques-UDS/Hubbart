@@ -18,8 +18,13 @@
 
 %%
 input: /* empty */
-     | input importation TOKEN_EOL
-     | input instantiate TOKEN_EOL
+     | ending
+     | input importation ending
+     | input instantiate ending
+;
+
+ending : TOKEN_EOL
+;
 
 /* IMPORTATION RULES */
 importation: import_def
@@ -50,6 +55,15 @@ array_int: TOKEN_OPEN_SQUARE_BRACK list_int TOKEN_CLOSE_SQUARE_BRACK;
 list_int: /* empty */
         | list_int TOKEN_INTEGER TOKEN_COMMA
         | list_int TOKEN_INTEGER
+;
+
+inst_array_float: TOKEN_IDENTIFIER TOKEN_COLON TOKEN_KEYWORD_LIST TOKEN_OPEN_SQUARE_BRACK TOKEN_KEYWORD_FLOAT TOKEN_CLOSE_SQUARE_BRACK TOKEN_ASSIGN array_float;
+
+array_float: TOKEN_OPEN_SQUARE_BRACK list_float TOKEN_CLOSE_SQUARE_BRACK;
+
+list_float: /* empty */
+        | list_float TOKEN_INTEGER TOKEN_COMMA
+        | list_float TOKEN_INTEGER
 ;
 
 %%

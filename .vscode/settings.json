@@ -75,6 +75,7 @@
         "stop_token": "cpp",
         "thread": "cpp",
         "cinttypes": "cpp",
-        "span": "cpp"
+        "span": "cpp",
+        "ast.h": "c"
     }
 }
