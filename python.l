@@ -6,9 +6,6 @@
 #include "python.tab.h"
 
 void yyerror(const char *);
-int yyival;
-double yyfval;
-char yysval[64];
 %}
 
 %option noyywrap noinput nounput
@@ -21,11 +18,13 @@ whites          (\ |\t)+
 eol             (\r|\n)
 
 %%
-"float"         { return TOKEN_KEYWORD_FLOAT; }
-"from"          { return TOKEN_KEYWORD_FROM; }
-"import"        { return TOKEN_KEYWORD_IMPORT; }
-"int"           { return TOKEN_KEYWORD_INT; }
-"List"          { return TOKEN_KEYWORD_LIST; }
+"from"          { yylval.str = strdup(yytext); return TOKEN_KEYWORD_FROM; }
+"import"        { yylval.str = strdup(yytext); return TOKEN_KEYWORD_IMPORT; }
+
+"float"         { yylval.str = strdup(yytext);  return TOKEN_KEYWORD_FLOAT; }
+"int"           { yylval.str = strdup(yytext);  return TOKEN_KEYWORD_INT; }
+
+"List"          { yylval.str = strdup(yytext);  return TOKEN_KEYWORD_LIST; }
 
 "["             { return TOKEN_OPEN_SQUARE_BRACK; }
 "]"             { return TOKEN_CLOSE_SQUARE_BRACK; }
@@ -34,11 +33,12 @@ eol             (\r|\n)
 ":"             { return TOKEN_COLON; }
 ","             { return TOKEN_COMMA; }
 
-{integers}      { yyival = atoi(yytext); return TOKEN_INTEGER; }
-{floats}        { yyfval = atof(yytext); return TOKEN_FLOAT; }
-{identifiers}   { strcpy(yytext, yysval); return TOKEN_IDENTIFIER; }
+{identifiers}   { yylval.str = strdup(yytext); return TOKEN_IDENTIFIER; }
+
+{integers}      { yylval.str = strdup(yytext); return TOKEN_INTEGER; }
+{floats}        { yylval.str = strdup(yytext); return TOKEN_FLOAT; }
 {eol}           { return TOKEN_EOL; }
-{indentation}   { return TOKEN_INDENT }
+{indentation}   { return TOKEN_INDENT; }
 {whites}        { }
 
 .               { yyerror("Unknown token!!!"); }

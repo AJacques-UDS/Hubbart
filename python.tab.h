@@ -53,22 +53,33 @@ extern int yydebug;
     TOKEN_KEYWORD_FROM = 259,
     TOKEN_IDENTIFIER = 260,
     TOKEN_KEYWORD_INT = 261,
-    TOKEN_INTEGER = 262,
-    TOKEN_COLON = 263,
-    TOKEN_ASSIGN = 264,
+    TOKEN_COLON = 262,
+    TOKEN_ASSIGN = 263,
+    TOKEN_INTEGER = 264,
     TOKEN_KEYWORD_FLOAT = 265,
     TOKEN_FLOAT = 266,
     TOKEN_COMMA = 267,
     TOKEN_OPEN_SQUARE_BRACK = 268,
     TOKEN_CLOSE_SQUARE_BRACK = 269,
     TOKEN_KEYWORD_LIST = 270,
-    TOKEN_EOL = 271
+    TOKEN_INDENT = 271,
+    TOKEN_EOL = 272
   };
 #endif
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+union YYSTYPE
+{
+#line 11 "python.y"
+
+    struct node_t *ast;
+    char *str;
+
+#line 80 "python.tab.h"
+
+};
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif

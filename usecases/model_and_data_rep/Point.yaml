@@ -1,8 +1,0 @@
-Point:
-  comment: Represent a 2D points in a cartesian plane
-  x:
-    type: float
-    width: 64
-  y:
-    type: float
-    width: 64

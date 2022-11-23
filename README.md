@@ -27,38 +27,52 @@ from math import sqrt
 
 * Instantiation statements
 ```Python
-myVar : int = 2
-myVar : float = 0.0
-myVar : List[int] = [1, 5, 8]
-myVar : MyObject = MyObject()
-```
-
-* Function Definition
-```Python
-def myFunction() -> int :
-<indent><statements>
-
-def myFunction(myParam: int) -> int :
-<indent><statements>
-```
-
-* Class Definition
-```Python
-def MyClass:
-<indent><__init__>
-<indent><function_statements>
+value : int = 16
+approx : float = 2.0
 ```
 
 * Arithmetic equations expression
 ```Python
-myVar = 5 + 3
-myVar = myVar + 3
-myVar = myVar - 3
+tmp = (approx + value / approx) / 2
+err = tmp - approx
 ```
 
 * Boolean expression
 ```Python
-True
-myVar > 0
-myVar < 4 and myVar >= 8
+err > 0.001
 ```
+
+* Control structure
+```Python
+while (err > 0.001):
+    # statements
+
+if (value > 0):
+    # statements
+
+```
+
+## Example : The Babilonnian algorithm for square roots
+
+The phase one should be able to tackle algorithm similar to the babilonnian algorithm:
+
+```Python
+import Hubbart
+
+# An undefined variable is a input
+value: int
+
+if (value >= 0):
+    approx: float = 2.0
+    tmp: float = (approx + value / approx) / 2
+    err = tmp - approx
+    while (err > 0.001):
+        approx = tmp
+        tmp = (approx + value / approx) / 2
+        err = tmp - approx
+    return (True, tmp)
+else :
+    return (False, 0)
+
+```
+
