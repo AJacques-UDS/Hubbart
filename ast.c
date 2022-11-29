@@ -92,3 +92,36 @@ struct node_t *ast_init_instantiate(struct node_t *id, struct node_t *type, stru
 
     return node;
 }
+
+struct node_t *ast_init_arith_op(struct node_t *term, char *op, struct node_t *factor) {
+    struct node_t *node = (struct node_t *)malloc(sizeof(struct node_t));
+    node->type = FACTOR_NODE;
+
+    if (op != NULL) {
+        char *operator = strdup(op);
+        node->node_data = (void *)operator;
+    }
+
+    node->children = (struct node_t **)malloc(sizeof(struct node_t *) * 2);
+    node->children[0] = (struct node_t *)malloc(sizeof(struct node_t));
+    node->children[1] = (struct node_t *)malloc(sizeof(struct node_t));
+
+    node->children[0] = term;
+    node->children[1] = factor;
+
+    return node;
+}
+
+struct node_t *ast_init_assign(struct node_t *id, struct node_t *arith) {
+    struct node_t *node = (struct node_t *)malloc(sizeof(struct node_t));
+    node->type = ASSIGN_NODE;
+
+    node->children = (struct node_t **)malloc(sizeof(struct node_t *) * 2);
+    node->children[0] = (struct node_t *)malloc(sizeof(struct node_t));
+    node->children[1] = (struct node_t *)malloc(sizeof(struct node_t));
+
+    node->children[0] = id;
+    node->children[1] = arith;
+
+    return node;
+}

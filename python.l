@@ -33,7 +33,16 @@ eol             (\r|\n)
 ":"             { return TOKEN_COLON; }
 ","             { /* return TOKEN_COMMA; */ }
 
-{identifiers}   { yylval.str = strdup(yytext); return TOKEN_IDENTIFIER; }
+"("             { puts("("); return TOKEN_PAREN_OPEN;  }
+")"             { puts(")"); return TOKEN_PAREN_CLOSE; }
+"**"            { puts("op **"); return TOKEN_ARITH_POWER; }
+"*"             { puts("op *"); return TOKEN_ARITH_MUL;   }
+"/"             { puts("op /"); return TOKEN_ARITH_DIV;   }
+"%"             { puts("op %"); return TOKEN_ARITH_MOD;   }
+"+"             { puts("op +"); return TOKEN_ARITH_ADD;   }
+"-"             { puts("op -"); return TOKEN_ARITH_SUB;   }
+
+{identifiers}   { printf("id %s\n", yytext); yylval.str = strdup(yytext); return TOKEN_IDENTIFIER; }
 
 {integers}      { yylval.str = strdup(yytext); return TOKEN_INTEGER; }
 {floats}        { yylval.str = strdup(yytext); return TOKEN_FLOAT; }

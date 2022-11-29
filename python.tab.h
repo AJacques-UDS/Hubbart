@@ -56,9 +56,17 @@ extern int yydebug;
     TOKEN_IDENTIFIER = 262,
     TOKEN_INTEGER = 263,
     TOKEN_FLOAT = 264,
-    TOKEN_ASSIGN = 265,
-    TOKEN_EOL = 266,
-    TOKEN_COLON = 267
+    TOKEN_EOL = 265,
+    TOKEN_COLON = 266,
+    TOKEN_ARITH_ADD = 267,
+    TOKEN_ARITH_SUB = 268,
+    TOKEN_ARITH_MUL = 269,
+    TOKEN_ARITH_DIV = 270,
+    TOKEN_ARITH_MOD = 271,
+    TOKEN_ARITH_POWER = 272,
+    TOKEN_ASSIGN = 273,
+    TOKEN_PAREN_OPEN = 274,
+    TOKEN_PAREN_CLOSE = 275
   };
 #endif
 
@@ -71,7 +79,7 @@ union YYSTYPE
     struct node_t *ast;
     char *str;
 
-#line 75 "python.tab.h"
+#line 83 "python.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

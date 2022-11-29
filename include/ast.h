@@ -19,7 +19,10 @@ typedef enum __node_type {
     INTEGER_LITERAL_NODE,
     FLOAT_LITERAL_NODE,
 
-    INSTANTIATION_NODE
+    INSTANTIATION_NODE,
+
+    FACTOR_NODE,
+    ASSIGN_NODE
 } node_type;
 
 struct node_t {
@@ -37,5 +40,8 @@ struct node_t *ast_init_integer(const char *);
 struct node_t *ast_init_float(const char *);
 
 struct node_t *ast_init_instantiate(struct node_t *, struct node_t *, struct node_t *);
+
+struct node_t *ast_init_arith_op(struct node_t *, char *, struct node_t *);
+struct node_t *ast_init_assign(struct node_t *, struct node_t *);
 
 #endif
