@@ -51,19 +51,14 @@ extern int yydebug;
   {
     TOKEN_KEYWORD_IMPORT = 258,
     TOKEN_KEYWORD_FROM = 259,
-    TOKEN_IDENTIFIER = 260,
-    TOKEN_KEYWORD_INT = 261,
-    TOKEN_COLON = 262,
-    TOKEN_ASSIGN = 263,
-    TOKEN_INTEGER = 264,
-    TOKEN_KEYWORD_FLOAT = 265,
-    TOKEN_FLOAT = 266,
-    TOKEN_COMMA = 267,
-    TOKEN_OPEN_SQUARE_BRACK = 268,
-    TOKEN_CLOSE_SQUARE_BRACK = 269,
-    TOKEN_KEYWORD_LIST = 270,
-    TOKEN_INDENT = 271,
-    TOKEN_EOL = 272
+    TOKEN_KEYWORD_INT = 260,
+    TOKEN_KEYWORD_FLOAT = 261,
+    TOKEN_IDENTIFIER = 262,
+    TOKEN_INTEGER = 263,
+    TOKEN_FLOAT = 264,
+    TOKEN_ASSIGN = 265,
+    TOKEN_EOL = 266,
+    TOKEN_COLON = 267
   };
 #endif
 
@@ -76,7 +71,7 @@ union YYSTYPE
     struct node_t *ast;
     char *str;
 
-#line 80 "python.tab.h"
+#line 75 "python.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

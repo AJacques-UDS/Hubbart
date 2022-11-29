@@ -24,21 +24,21 @@ eol             (\r|\n)
 "float"         { yylval.str = strdup(yytext);  return TOKEN_KEYWORD_FLOAT; }
 "int"           { yylval.str = strdup(yytext);  return TOKEN_KEYWORD_INT; }
 
-"List"          { yylval.str = strdup(yytext);  return TOKEN_KEYWORD_LIST; }
+"List"          { /* yylval.str = strdup(yytext);  return TOKEN_KEYWORD_LIST; */ }
 
-"["             { return TOKEN_OPEN_SQUARE_BRACK; }
-"]"             { return TOKEN_CLOSE_SQUARE_BRACK; }
+"["             { /* return TOKEN_OPEN_SQUARE_BRACK; */ }
+"]"             { /* return TOKEN_CLOSE_SQUARE_BRACK; */ }
 
 "="             { return TOKEN_ASSIGN; }
 ":"             { return TOKEN_COLON; }
-","             { return TOKEN_COMMA; }
+","             { /* return TOKEN_COMMA; */ }
 
 {identifiers}   { yylval.str = strdup(yytext); return TOKEN_IDENTIFIER; }
 
 {integers}      { yylval.str = strdup(yytext); return TOKEN_INTEGER; }
 {floats}        { yylval.str = strdup(yytext); return TOKEN_FLOAT; }
 {eol}           { return TOKEN_EOL; }
-{indentation}   { return TOKEN_INDENT; }
+{indentation}   { /* return TOKEN_INDENT; */ }
 {whites}        { }
 
 .               { yyerror("Unknown token!!!"); }

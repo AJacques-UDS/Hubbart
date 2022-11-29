@@ -8,14 +8,18 @@
 #include "symtable.h"
 
 typedef enum __node_type {
-    ROOT_NODE,
+    IMPORTATION_NODE,
+
     IDENTIFIER_NODE,
-    DATATYPE_NODE,
-    VALUE_NODE,
-    INSTANTIATE_NODE,
-    KEYWORD_NODE,
-    IMPORT_NODE,
-    FROM_NODE
+    IMPORT_KW_NODE,
+    INT_KW_NODE,
+    FLOAT_KW_NODE,
+    FROM_KW_NODE,
+
+    INTEGER_LITERAL_NODE,
+    FLOAT_LITERAL_NODE,
+
+    INSTANTIATION_NODE
 } node_type;
 
 struct node_t {
@@ -24,18 +28,14 @@ struct node_t {
     struct node_t **children;
 };
 
-void init_ast(struct node_t *);
-
-struct node_t *ast_init_inst(struct node_t *, struct node_t *, struct node_t *);
-struct node_t *ast_init_import(struct node_t *, struct node_t *);
-struct node_t *ast_init_from(struct node_t *);
+struct node_t *ast_init_importation(struct node_t *, struct node_t *);
 
 struct node_t *ast_init_identifier(const char *);
-struct node_t *ast_init_value(const char *);
-struct node_t *ast_init_type(const char *);
 struct node_t *ast_init_kw(const char *);
 
-void print_node(struct node_t *);
-void delete_tree(struct node_t *);
+struct node_t *ast_init_integer(const char *);
+struct node_t *ast_init_float(const char *);
+
+struct node_t *ast_init_instantiate(struct node_t *, struct node_t *, struct node_t *);
 
 #endif
