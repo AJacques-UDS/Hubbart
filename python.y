@@ -70,7 +70,7 @@ literal_float: TOKEN_FLOAT          { $$ = ast_init_float($1); };
 
 assign: identifier TOKEN_ASSIGN arith_expr { $$ = ast_init_assign($1, $3); };
 
-primary_expr: TOKEN_PAREN_OPEN expression TOKEN_PAREN_CLOSE {  };
+/*primary_expr: TOKEN_PAREN_OPEN expression TOKEN_PAREN_CLOSE {  };
 ;
 
 expression: assignment_expression
@@ -123,7 +123,7 @@ logical_or_expression: logical_and_expression
 assignment_expression: logical_or_expression
     // Here we have =
     | identifier TOKEN_ASSIGN arith_expr { $$ = ast_init_assign($1, $3); };
-;
+;*/
 
 
 arith_expr: factor
@@ -143,7 +143,7 @@ power: term
 term: identifier;
     | literal_int;
     | literal_float;
-    | TOKEN_PAREN_OPEN term TOKEN_PAREN_CLOSE { $$ = $2; };
+    | TOKEN_PAREN_OPEN arith_expr TOKEN_PAREN_CLOSE { $$ = $2; };
 ;
 
 %%
